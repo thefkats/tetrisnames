@@ -10,8 +10,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import checker.Util;
-
 public class Name extends Thread {
 
 	private ArrayList<String> words;
