@@ -1,4 +1,4 @@
-package thechecker;
+package names;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,10 +30,10 @@ public class Main {
 
 		if (run == 0) {
 			if (new File(path).exists()) {
-				thechecker.Util.removeFile(new File(path + "data"));
-				thechecker.Util.removeFile(new File(path + "finished"));
+				names.Util.removeFile(new File(path + "data"));
+				names.Util.removeFile(new File(path + "finished"));
 			}
-			thechecker.Util.setup(path);
+			names.Util.setup(path);
 		}
 		if (run >= 16) {
 			check.validateAll();
@@ -67,7 +67,7 @@ public class Main {
 			System.exit(0);
 			return null;
 		} else {
-			ArrayList<String> settingString = thechecker.Util.getList(new File("settings.txt"), false);
+			ArrayList<String> settingString = names.Util.getList(new File("settings.txt"), false);
 
 			for (int i = 0; i < settingString.size(); i++) {
 				String line = settingString.get(i);

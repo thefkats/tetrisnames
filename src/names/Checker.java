@@ -1,4 +1,4 @@
-package thechecker;
+package names;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -37,7 +37,7 @@ public class Checker {
 	 * @throws FileNotFoundException
 	 */
 	public Checker(String path) throws FileNotFoundException {
-		thechecker.Util.setup(path);
+		names.Util.setup(path);
 		this.path = path;
 		threadNum = 1;
 		gen = 3;
@@ -53,7 +53,7 @@ public class Checker {
 	 * @throws FileNotFoundException
 	 */
 	public Checker(String path, int threads) throws FileNotFoundException {
-		thechecker.Util.setup(path);
+		names.Util.setup(path);
 		this.path = path;
 		threadNum = threads;
 		gen = 3;
@@ -61,7 +61,7 @@ public class Checker {
 
 	public Checker(String path, int gen, int threads) throws FileNotFoundException {
 		System.out.print("Setting up...");
-		thechecker.Util.setup(path);
+		names.Util.setup(path);
 		this.path = path;
 		threadNum = threads;
 		this.gen = Math.max(0, Math.min(gen, 3));
@@ -105,7 +105,7 @@ public class Checker {
 	}
 
 	public void validateAll() throws FileNotFoundException {
-		ArrayList<File> documents = thechecker.Util.findFiles(new File(path + "sources"));
+		ArrayList<File> documents = names.Util.findFiles(new File(path + "sources"));
 
 		for (File file : documents) {
 			validate(file);
@@ -116,7 +116,7 @@ public class Checker {
 		System.out.print("-Validating: " + doc.getName() + "...");
 		long startTime = System.currentTimeMillis();
 
-		ArrayList<String> words = thechecker.Util.getList(doc);
+		ArrayList<String> words = names.Util.getList(doc);
 		ArrayList<String> valid = new ArrayList<>();
 		ArrayList<String> invalid = new ArrayList<>();
 
@@ -131,8 +131,8 @@ public class Checker {
 		java.util.Collections.sort(valid);
 		java.util.Collections.sort(invalid);
 
-		File outputValid = new File(path + "data/valid/" + thechecker.Util.getName(doc) + ".valid.txt");
-		File outputInvalid = new File(path + "data/invalid/" + thechecker.Util.getName(doc) + ".invalid.txt");
+		File outputValid = new File(path + "data/valid/" + names.Util.getName(doc) + ".valid.txt");
+		File outputInvalid = new File(path + "data/invalid/" + names.Util.getName(doc) + ".invalid.txt");
 		PrintWriter writer = new PrintWriter(outputValid);
 		for (String word : valid) {
 			writer.println(word);
@@ -144,8 +144,8 @@ public class Checker {
 		}
 		writer.close();
 
-		thechecker.Util.removeDuplicates(outputValid);
-		thechecker.Util.removeDuplicates(outputInvalid);
+		names.Util.removeDuplicates(outputValid);
+		names.Util.removeDuplicates(outputInvalid);
 
 		long endTime = System.currentTimeMillis();
 		System.out.println(
@@ -156,20 +156,20 @@ public class Checker {
 		if (word.length() < 3 || word.length() > 16)
 			return false;
 
-		for (String swear : thechecker.Util.invalidWords) {
+		for (String swear : names.Util.invalidWords) {
 			if (word.contains(swear))
 				return false;
 		}
 
-		if (!thechecker.Util.FIRST_LETTERS.contains("" + word.charAt(0)))
+		if (!names.Util.FIRST_LETTERS.contains("" + word.charAt(0)))
 			if (word.charAt(0) == '0') {
-				if (!thechecker.Util.FIRST_LETTERS.contains("" + word.charAt(1)))
+				if (!names.Util.FIRST_LETTERS.contains("" + word.charAt(1)))
 					return false;
 			} else {
 				return false;
 			}
 		for (int i = 1; i < word.length(); i++) {
-			if (!thechecker.Util.LETTERS.contains("" + word.charAt(i)))
+			if (!names.Util.LETTERS.contains("" + word.charAt(i)))
 				return false;
 		}
 
@@ -180,7 +180,7 @@ public class Checker {
 		ArrayList<String> include = new ArrayList<>();
 		ArrayList<String> exclude = new ArrayList<>();
 		include.add(".valid");
-		ArrayList<File> documents = thechecker.Util.findFiles(new File(path + "/data/valid"), include, exclude);
+		ArrayList<File> documents = names.Util.findFiles(new File(path + "/data/valid"), include, exclude);
 
 		for (File file : documents) {
 			generate(file);
@@ -191,7 +191,7 @@ public class Checker {
 		System.out.print("-Generating: " + doc.getName() + "...");
 		long startTime = System.currentTimeMillis();
 
-		ArrayList<String> words = thechecker.Util.getList(doc);
+		ArrayList<String> words = names.Util.getList(doc);
 		ArrayList<String> generatedWords = new ArrayList<>();
 		// TODO make this a general function
 
@@ -218,14 +218,14 @@ public class Checker {
 
 		java.util.Collections.sort(generatedWords);
 
-		File output = new File(path + "data/valid/" + thechecker.Util.getName(doc) + "gen" + gen + ".txt");
+		File output = new File(path + "data/valid/" + names.Util.getName(doc) + "gen" + gen + ".txt");
 		PrintWriter writer = new PrintWriter(output);
 		for (String word : generatedWords) {
 			writer.println(word);
 		}
 		writer.close();
 
-		thechecker.Util.removeDuplicates(output);
+		names.Util.removeDuplicates(output);
 		long endTime = System.currentTimeMillis();
 		System.out.println(
 				" Done! (" + (output.length() / 1000.0) + " kb in " + ((endTime - startTime) / 1000.0) + " seconds)");
@@ -261,7 +261,7 @@ public class Checker {
 		String newWord = "" + word.charAt(0);
 
 		for (int i = 1; i < word.length(); i++) {
-			if (thechecker.Util.VOWELS.contains("" + word.charAt(i))) {
+			if (names.Util.VOWELS.contains("" + word.charAt(i))) {
 				newWord += "_";
 			} else {
 				newWord += word.charAt(i);
@@ -321,20 +321,20 @@ public class Checker {
 		ArrayList<String> exclude = new ArrayList<>();
 		include.add(".valid");
 		include.add(".gen" + gen);
-		ArrayList<File> documents = thechecker.Util.findFiles(new File(path + "data/valid"), include, exclude);
+		ArrayList<File> documents = names.Util.findFiles(new File(path + "data/valid"), include, exclude);
 
 		include = new ArrayList<>();
 		exclude = new ArrayList<>();
 		include.add("checked");
-		ArrayList<File> documentsDone = thechecker.Util.findFiles(new File(path + "finished"), include, exclude);
+		ArrayList<File> documentsDone = names.Util.findFiles(new File(path + "finished"), include, exclude);
 		ArrayList<String> finishedNames = new ArrayList<>();
 
 		for (File file : documentsDone) {
-			finishedNames.add(thechecker.Util.getName(file));
+			finishedNames.add(names.Util.getName(file));
 		}
 
 		for (File file : documents) {
-			if (!finishedNames.contains(thechecker.Util.getName(file)))
+			if (!finishedNames.contains(names.Util.getName(file)))
 				split(file);
 		}
 	}
@@ -344,9 +344,9 @@ public class Checker {
 		long startTime = System.currentTimeMillis();
 
 		ArrayList<String> words = Util.getList(doc);
-		String path = this.path + "data/temp/" + thechecker.Util.getName(doc);
+		String path = this.path + "data/temp/" + names.Util.getName(doc);
 		if (new File(path).exists()) {
-			thechecker.Util.removeFile(new File(path));
+			names.Util.removeFile(new File(path));
 		}
 
 		new File(path).mkdir();
@@ -354,8 +354,8 @@ public class Checker {
 
 		int place = 0;
 
-		for (int i = 0; i < thechecker.Util.FIRST_LETTERS.length(); i++) {
-			new File(path + thechecker.Util.FIRST_LETTERS.charAt(i)).mkdir();
+		for (int i = 0; i < names.Util.FIRST_LETTERS.length(); i++) {
+			new File(path + names.Util.FIRST_LETTERS.charAt(i)).mkdir();
 
 			ArrayList<String> letter = new ArrayList<>();
 			while (place < words.size() && words.get(place).charAt(0) == Util.FIRST_LETTERS.charAt(i)) {
@@ -385,7 +385,7 @@ public class Checker {
 		ArrayList<String> exclude = new ArrayList<>();
 		exclude.add(".c");
 		exclude.add(".checked");
-		ArrayList<File> documents = thechecker.Util.findFiles(new File(path + "data/temp"), include, exclude);
+		ArrayList<File> documents = names.Util.findFiles(new File(path + "data/temp"), include, exclude);
 
 		for (File file : documents) {
 			if (!new File(file.getName() + ".checked").exists())
@@ -398,7 +398,7 @@ public class Checker {
 				+ doc.getParentFile().getName() + "/" + doc.getName() + "...");
 		long startTime = System.currentTimeMillis();
 
-		ArrayList<String> names = thechecker.Util.getList(doc);
+		ArrayList<String> names = Util.getList(doc);
 		ArrayList<ArrayList<String>> wordList = new ArrayList<>();
 		for (int i = 0; i < threadNum; i++) {
 			wordList.add(new ArrayList<String>());
@@ -460,12 +460,12 @@ public class Checker {
 		ArrayList<String> include = new ArrayList<>();
 		ArrayList<String> exclude = new ArrayList<>();
 		include.add("checked");
-		ArrayList<File> untaken = thechecker.Util.findFiles(doc, include, exclude);
+		ArrayList<File> untaken = names.Util.findFiles(doc, include, exclude);
 		sortingLists.add(untaken);
 
 		include = new ArrayList<>();
 		include.add("taken");
-		ArrayList<File> taken = thechecker.Util.findFiles(doc, include, exclude);
+		ArrayList<File> taken = names.Util.findFiles(doc, include, exclude);
 		sortingLists.add(taken);
 
 		for (ArrayList<File> files : sortingLists) {
@@ -473,26 +473,26 @@ public class Checker {
 			String fileName = "error";
 
 			for (File file : files) {
-				words.addAll(thechecker.Util.getList(file));
+				words.addAll(names.Util.getList(file));
 				fileName = file.getName();
 			}
-			thechecker.Util.logPrint(path, "Sorting " + doc.getName());
+			names.Util.logPrint(path, "Sorting " + doc.getName());
 
-			File dir = new File(path + "finished/" + thechecker.Util.getName(doc));
+			File dir = new File(path + "finished/" + names.Util.getName(doc));
 			if (!dir.exists())
 				dir.mkdir();
 
-			File combined = new File(path + "finished/" + thechecker.Util.getName(doc) + "/"
+			File combined = new File(path + "finished/" + names.Util.getName(doc) + "/"
 					+ fileName.substring(fileName.indexOf('.') + 1));
 			PrintWriter writer = new PrintWriter(combined);
 			for (String word : words) {
 				writer.println(word);
 			}
 			writer.close();
-			thechecker.Util.removeDuplicates(combined);
+			names.Util.removeDuplicates(combined);
 		}
 
-		thechecker.Util.removeFile(doc);
+		names.Util.removeFile(doc);
 
 		long endTime = System.currentTimeMillis();
 		System.out.println(
@@ -507,7 +507,7 @@ public class Checker {
 		ArrayList<String> include = new ArrayList<>();
 		ArrayList<String> exclude = new ArrayList<>();
 		include.add("checked");
-		ArrayList<File> documents = thechecker.Util.findFiles(new File(path + "finished"), include, exclude);
+		ArrayList<File> documents = names.Util.findFiles(new File(path + "finished"), include, exclude);
 
 		for (File file : documents) {
 			sort(file);
@@ -529,10 +529,10 @@ public class Checker {
 		}
 
 		// Sort all words by length.
-		for (String word : thechecker.Util.getList(doc)) {
+		for (String word : names.Util.getList(doc)) {
 			boolean isOnlyLetters = true;
 			for (int i = 0; i < word.length(); i++) {
-				if (!thechecker.Util.AZ.contains("" + word.charAt(i))) {
+				if (!names.Util.AZ.contains("" + word.charAt(i))) {
 					isOnlyLetters = false;
 					break;
 				}
@@ -572,7 +572,7 @@ public class Checker {
 		ArrayList<String> exclude = new ArrayList<>();
 
 		exclude.add("formatted");
-		ArrayList<File> files = thechecker.Util.findFiles(doc, include, exclude);
+		ArrayList<File> files = Util.findFiles(doc, include, exclude);
 
 		for (File file : files) {
 			format(file);
@@ -583,9 +583,9 @@ public class Checker {
 		System.out.print("-Formatting: " + doc.getParentFile().getName() + "...");
 		long startTime = System.currentTimeMillis();
 
-		ArrayList<String> names = thechecker.Util.getList(doc);
+		ArrayList<String> names = Util.getList(doc);
 
-		File out = new File(doc.getParentFile().getPath() + "/" + thechecker.Util.getName(doc) + ".formatted.txt");
+		File out = new File(doc.getParentFile().getPath() + "/" + Util.getName(doc) + ".formatted.txt");
 		PrintWriter output = new PrintWriter(out);
 
 		ArrayList<String> a = new ArrayList<>();

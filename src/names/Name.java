@@ -1,4 +1,4 @@
-package thechecker;
+package names;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
