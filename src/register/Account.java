@@ -24,7 +24,7 @@ import org.openqa.selenium.support.ui.Select;
 import captcha.Cracker;
 
 public class Account {
-
+	public String path;
 	private String email;
 	private String username;
 	private String password;
@@ -45,11 +45,16 @@ public class Account {
 		isRegistered = registered;
 		isValidated = validated;
 		this.email = email;
+		path = "tetrisnames data/";
 	}
 
 	public boolean register() {
-		isRegistered = register(username, email, password);
-		
+		try {
+			isRegistered = register(username, email, password);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 
@@ -61,23 +66,23 @@ public class Account {
 	public void play() {
 		// TODO
 	}
-	
+
 	public void changeEmail(String email) {
 		// TODO
 	}
-	
+
 	public void changePassword(String password) {
 		// TODO
 	}
-	
+
 	public void forgotPassword(String email) {
 		// TODO
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -93,7 +98,7 @@ public class Account {
 	public Account clone() {
 		return new Account(username, password, email);
 	}
-	
+
 	public static boolean isValidated(String userName, String passWord) {
 		// TODO
 		return false;
@@ -132,13 +137,13 @@ public class Account {
 		System.out.println("[error: serious] Unchecked username in Account.userName");
 		return false;
 	}
-	
-	private boolean register(String uname, String pword, String eMail) {
+
+	private boolean register(String uname, String pword, String eMail) throws IOException {
 		String exePath = "chromedriver.exe";
 		System.setProperty("webdriver.chrome.driver", exePath);
 		WebDriver driver = new ChromeDriver();
 		driver.get("https://www.tetrisfriends.com/users/register.php?saveGame=true&linkTag=nav");
-		
+
 		WebElement email = driver.findElement(By.id("email"));
 		WebElement uName = driver.findElement(By.id("username"));
 		WebElement pWord1 = driver.findElement(By.id("password"));
@@ -199,7 +204,7 @@ public class Account {
 		pBDay.click();
 		pLoc.click();
 		key.sendKeys(keyText);
-		
+
 		return false;
 	}
 }
